@@ -1,0 +1,62 @@
+04.18 11:43 AM
+
+<div class="container">
+        <h1><u>DataFlair Voting System</u></h1>
+        <div class="form-container">
+            <h1>Registration</h1>
+            <form action="{% url 'registration' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Name" name="uname">
+                <input type="email" placeholder="Email" name="email">
+                <input type="text" placeholder="Age" name="age">
+                <input type="password" placeholder="Password" name="passw">
+                <input type="password" placeholder="Confirm Password" name="cpass">
+                <button type="submit">Register</button>
+            </form>
+            <p>Already registered? <a href="{% url 'index' %}">click here</a></p>
+        </div>
+    </div>
+Views.py
+
+def register(request):
+    return render(request, "app/registration.html")
+
+def Registration(request):
+    if request.method == "POST":
+        username = request.POST['uname']
+        email = request.POST['email']
+        password = request.POST['passw']
+        cpassword = request.POST['cpass']
+        age = int(request.POST['age'])  # Convert age to an integer
+
+        if password == cpassword:
+            new_user = User.objects.create(
+            username = username,
+            email = email,
+            )
+            new_user.set_password(password)
+            new_user.save()
+
+            return redirect("index")
+        return
+Urls.py
+
+path("register", views.register, name="register"),
+path("registration", views.Registration, name="registration"),
+8. Create a login system
+Templates.html -> login.html
+
+<div class="container">
+        <h1><u>DataFlair Voting System</u></h1>
+        <div class="form-container">
+            <h1>Login</h1>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Username" name="uname">
+                <input type="password" placeholder="Password" name="password">
+                <button type="submit">Login</button>
+            </form>
+            <p>Not registered? <a href="{% url 'register' %}">click here</a></p>
+        </div>
+    </div>
+
